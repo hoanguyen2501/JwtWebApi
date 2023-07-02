@@ -10,14 +10,9 @@ namespace JwtWebApi.Attributes.Authorization
     {
         private readonly IList<Role> _roles;
 
-        public AuthorizeAttribute()
-        {
-            _roles = Enum.GetValues(typeof(Role)).Cast<Role>().ToList();
-        }
-
         public AuthorizeAttribute(params Role[] roles)
         {
-            _roles = roles;
+            _roles = roles ?? Array.Empty<Role>();
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)

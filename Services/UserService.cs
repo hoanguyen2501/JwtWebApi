@@ -10,6 +10,7 @@ namespace JwtWebApi.Services
     public class UserService : IUserService
     {
         private readonly JwtWebApiDbContext _context;
+        // private readonly HttpContext _httpContext;
 
         public UserService(JwtWebApiDbContext context)
         {

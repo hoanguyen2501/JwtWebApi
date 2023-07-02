@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JwtWebApi.Controllers
 {
-    [Authorize(roles: Role.Admin)]
+    [Authorize]
     public class UserController : BaseApiController
     {
         private readonly IUserService _userService;
@@ -17,6 +17,7 @@ namespace JwtWebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(roles: Role.Admin)]
         public IActionResult GetAll()
         {
             var users = _userService.GetAllUsers();
@@ -26,17 +27,28 @@ namespace JwtWebApi.Controllers
             return Ok(users);
         }
 
-        [Authorize]
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            var users = _userService.GetUserById(id);
-            if (users == null)
+            var currentUser = (UserDto)HttpContext.Items["User"];
+            if (id != currentUser.Id && currentUser.Role != Role.Admin.ToString())
+                return Unauthorized(new { message = "Unauthorized" });
+
+            var user = _userService.GetUserById(id);
+            if (user == null)
                 return BadRequest();
 
-            return Ok(users);
+            return Ok(user);
         }
 
+        [HttpGet("profile")]
+        public IActionResult GetUserProfile()
+        {
+
+            return Ok();
+        }
+
+        [Authorize(roles: Role.Admin)]
         [HttpPost("create")]
         public IActionResult Create(CreateNewUserDto dto)
         {

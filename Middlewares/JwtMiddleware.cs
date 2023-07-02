@@ -12,11 +12,12 @@ namespace JwtWebApi.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService, IJwtUtil jwtUtil)
+        public async Task Invoke(HttpContext context, IJwtUtil jwtUtil, IUserService userService)
         {
             string token = context.Request.Headers["Authorization"]
                                         .FirstOrDefault()?.Split(" ").Last();
-            int? userId = jwtUtil.ValidateAccessToken(token);
+
+            var userId = jwtUtil.ValidateAccessToken(token);
 
             if (userId != null)
             {

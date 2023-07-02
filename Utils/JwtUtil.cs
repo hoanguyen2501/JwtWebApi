@@ -25,7 +25,8 @@ namespace JwtWebApi.Utils
             var claims = new List<Claim>()
             {
                 new Claim("id", user.Id.ToString()),
-                new Claim("username", user.Username)
+                new Claim("username", user.Username),
+                new Claim("role", user.Role.ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -45,33 +46,35 @@ namespace JwtWebApi.Utils
         {
             if (token == null)
                 return null;
-
-            try
+            else
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
-                var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(token, new TokenValidationParameters()
+                try
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = key,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    tokenHandler.ValidateToken(token, new TokenValidationParameters()
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
 
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                        // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                        ClockSkew = TimeSpan.Zero
+                    }, out SecurityToken validatedToken);
 
-                var jwt = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwt.Claims.First(x => x.Type == "id").Value);
+                    var jwt = (JwtSecurityToken)validatedToken;
 
-                return userId;
+                    int? userId = Convert.ToInt32(jwt.Claims.First(x => x.Type == "id").Value);
+
+                    return userId;
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
             }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-
         }
     }
 }

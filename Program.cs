@@ -32,7 +32,14 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
 
+    app.UseCors(x => x
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+
     app.UseHttpsRedirection();
+
+    app.UseMiddleware<ErrorHandlerMiddleware>();
 
     app.UseMiddleware<JwtMiddleware>();
 

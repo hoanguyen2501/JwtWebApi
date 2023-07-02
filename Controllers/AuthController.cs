@@ -1,9 +1,11 @@
+using JwtWebApi.Attributes.Authorization;
 using JwtWebApi.DTOs.Auth;
 using JwtWebApi.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JwtWebApi.Controllers
 {
+
     public class AuthController : BaseApiController
     {
         private readonly IAuthService _authService;
@@ -13,6 +15,7 @@ namespace JwtWebApi.Controllers
             _authService = authService;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login(LoginRequestDto request)
         {
@@ -23,6 +26,7 @@ namespace JwtWebApi.Controllers
             return Ok(response);
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public IActionResult Register()
         {

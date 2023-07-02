@@ -3,15 +3,18 @@ using System;
 using JwtWebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace JwtWebApi.Migrations
 {
     [DbContext(typeof(JwtWebApiDbContext))]
-    partial class JwtWebApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230702084925_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

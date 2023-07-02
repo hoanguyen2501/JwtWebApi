@@ -1,9 +1,11 @@
-﻿using JwtWebApi.Entities.Enum;
+﻿using System.ComponentModel.DataAnnotations;
+using JwtWebApi.Entities.Enum;
 
 namespace JwtWebApi.Entities
 {
     public class User
     {
+        [Key]
         private int id;
         private string firstName;
         private string lastName;

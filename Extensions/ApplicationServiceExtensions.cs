@@ -11,7 +11,7 @@ namespace JwtWebApi.Extensions
         {
             services.AddDbContext<JwtWebApiDbContext>(options =>
             {
-                options.UseSqlite(config.GetConnectionString("SQLiteConnection"));
+                options.UseMySQL(config.GetConnectionString("MySqlConnection"));
             });
 
             return services;
